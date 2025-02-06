@@ -1,6 +1,6 @@
 #pragma once
 #include "Registers.h"
-#include "cpu.h"
+#include "Cpu.h"
 #include <assert.h>
 
 void test_registers();

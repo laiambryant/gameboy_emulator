@@ -19,13 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cpu.h" />
+    <ClInclude Include="Cpu.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Emulator.h" />
+    <ClInclude Include="front_end.h" />
     <ClInclude Include="memory_bus.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="Registers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cpu.c" />
+    <ClCompile Include="..\SDLTest1\front_end.c" />
+    <ClCompile Include="Cpu.c" />
+    <ClCompile Include="Emulator.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Registers.c" />
     <ClCompile Include="tests.c" />
@@ -82,6 +87,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <SourcePath>$(SourcePath)</SourcePath>
+    <IncludePath>C:\Users\liam.bryant\Documents\cpp_ws\libraries\SDL3-3.2.2\include\SDL3;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -116,10 +126,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\liam.bryant\Documents\cpp_ws\libraries\SDL3-3.2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Version>0.1</Version>
+      <AdditionalLibraryDirectories>C:\Users\liam.bryant\Documents\cpp_ws\libraries\SDL3-3.2.2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

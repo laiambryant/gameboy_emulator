@@ -19,6 +19,9 @@
     <Filter Include="Source Files\test">
       <UniqueIdentifier>{1a364e03-5981-40a9-ab97-26b0faf643ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\frontend">
+      <UniqueIdentifier>{09c308d5-3bcd-4036-8b4d-1bbda7a8bc03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Registers.h">
@@ -27,10 +30,19 @@
     <ClInclude Include="tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cpu.h">
+    <ClInclude Include="Cpu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="memory_bus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="front_end.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Emulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,8 +56,14 @@
     <ClCompile Include="tests.c">
       <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="cpu.c">
+    <ClCompile Include="Cpu.c">
       <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDLTest1\front_end.c">
+      <Filter>Source Files\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Emulator.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

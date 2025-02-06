@@ -1,20 +1,31 @@
 #pragma once
 #include "Registers.h"
 #include "memory_bus.h"
-#define reg cpu->registers
+#include "Common.h"
 
+#define reg cpu->regs
 
 typedef struct CPU {
-	Registers* registers;
-	Flags* flags;
-	uint16_t pc;
-	memory_bus* bus;
+    Registers* regs;
+    Flags* fl;
+    u16 pc;
+    memory_bus* bus;
 } CPU;
 
-//Initializes the CPU
-CPU* get_cpu();
-//Destroys the CPU
-void destroy_cpu(CPU* cpu);
+//Instructions
+typedef enum InstructionName {
+    INSTR_ADD, INSTR_ADD_A, INSTR_ADD_COMPOUND, INSTR_ADC, INSTR_SUB,
+    INSTR_SBC, INSTR_AND, INSTR_OR, INSTR_XOR, INSTR_CP, INSTR_INC,
+    INSTR_DEC, INSTR_CCF, INSTR_SCF, INSTR_RRA, INSTR_RLA, INSTR_RRCA,
+    INSTR_RRLA, INSTR_CPL, INSTR_BIT, INSTR_RESET, INSTR_SET, INSTR_SRL,
+    INSTR_RR, INSTR_RL, INSTR_RRC, INSTR_RLC, INSTR_SRA, INSTR_SLA, INSTR_SWAP
+} InstructionName;
+
+typedef struct Instruction {
+    void* operation;
+    InstructionName instruction_name;
+} Instruction;
+
 //ADD (add) - add the value stored in the source register with the value in the target register
 void ADD(CPU* cpu, Register source, Register target);
 //ADD (add) - add the value stored in a specific register with the value in the A register
@@ -54,11 +65,11 @@ void RRLA(CPU* cpu);
 //CPL (complement) - toggle every bit of the A register
 void CPL(CPU* cpu);
 //BIT (bit test) - test to see if a specific bit of a specific register is set
-void BIT(CPU* cpu, uint8_t bit, Register target);
+void BIT(CPU* cpu, u8 bit, Register target);
 //RESET (bit reset) - set a specific bit of a specific register to 0
-void RESET(CPU* cpu, uint8_t bit, Register target);
+void RESET(CPU* cpu, u8 bit, Register target);
 //SET (bit set) - set a specific bit of a specific register to 1
-void SET(CPU* cpu, uint8_t bit, Register target);
+void SET(CPU* cpu, u8 bit, Register target);
 //SRL (shift right logical) - bit shift a specific register right by 1
 void SRL(CPU* cpu, Register target);
 //RR (rotate right) - bit rotate a specific register right by 1 through the carry flag
@@ -75,3 +86,20 @@ void SRA(CPU* cpu, Register target);
 void SLA(CPU* cpu, Register target);
 //SWAP (swap nibbles) - switch upper and lower nibble of a specific register
 void SWAP(CPU* cpu, Register targets);
+
+// CPU functions
+CPU* get_cpu();
+// Destroys the CPU
+void destroy_cpu(CPU* cpu);
+// Sets flag bit to 1 if the result of an operation is overflowing
+void setFlagSubtract(CPU* cpu, InstructionName instruction_name);
+// Sets flag bit to 1 if the result of an operation is zero
+void setFlagZero(CPU* cpu, u16 result);
+// Sets flag bit to 1 if the result of an operation is carrying
+void setFlagCarry(CPU* cpu, u16 result);
+// Sets flag bit to 1 if the result of an operation is half carrying
+void setFlagHalfCarry(CPU* cpu, u16 result);
+// Performs all flag checks for 8 bit operations
+void checkFlags8(CPU* cpu, u16 result, InstructionName instruction_name);
+// Performs all flag checks for 16 bit operations
+void checkFlags16(CPU* cpu, u32 result, InstructionName instruction_name);
