@@ -1,8 +1,22 @@
 #include "Emulator.h"
-#include "front_end.h"	
 
-void runEmulator(int argc, char** argv) {
+void runEmulator(Emulator* emulator, int argc, char** argv) {
+	if (!emulator->front_end) {
+		emulator->front_end = create_front_end("Emulator");
+		init_front_end(emulator->front_end, "Emulator");
+	}
 	printf("Running emulator...\n");
+	while (emulator->running) {
+		if (!emulator->paused) {
+			emulator->ticks++;
+			delay(10);
+			printf("Ticks: %d\n", emulator->ticks);
+			if (!cart_load("")) {
+				emulator->running = 1;
+			}
+		}
+	}
+	free_front_end(emulator->front_end);
 }
 
 Emulator* get_emulator() {
@@ -14,5 +28,7 @@ Emulator* get_emulator() {
 	emulator->running = 1;
 	emulator->paused = 0;
 	emulator->ticks = 0;
+	emulator->front_end = create_front_end("Emulator");
+	init_front_end(emulator->front_end, "Emulator");
 	return emulator;
 }

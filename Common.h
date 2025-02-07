@@ -1,6 +1,9 @@
 #pragma once
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define ONE 0x01
-#define ZERO 0x00
+#define ZERO_HEX 0x00
 #define MAX_16_BIT 0xFF
 #define MAX_8_BIT 0x0F
 #define u64 unsigned int

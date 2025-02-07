@@ -1,7 +1,5 @@
 #pragma once
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "Common.h"
 
 typedef struct Registers {
     uint8_t a, b, c, d, e, h, l;

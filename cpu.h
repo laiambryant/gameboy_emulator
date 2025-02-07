@@ -85,7 +85,7 @@ void SRA(CPU* cpu, Register target);
 //SLA (shift left arithmetic) - arithmetic shift a specific register left by 1
 void SLA(CPU* cpu, Register target);
 //SWAP (swap nibbles) - switch upper and lower nibble of a specific register
-void SWAP(CPU* cpu, Register targets);
+void SWAP(CPU* cpu, Register target1, Register target2);
 
 // CPU functions
 CPU* get_cpu();

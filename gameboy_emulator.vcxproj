@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cartridge.h" />
     <ClInclude Include="Cpu.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Emulator.h" />
@@ -29,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\SDLTest1\front_end.c" />
+    <ClCompile Include="Cartridge.c" />
     <ClCompile Include="Cpu.c" />
     <ClCompile Include="Emulator.c" />
     <ClCompile Include="main.c" />

@@ -45,6 +45,9 @@
     <ClInclude Include="Emulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cartridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -62,8 +65,11 @@
     <ClCompile Include="..\SDLTest1\front_end.c">
       <Filter>Source Files\frontend</Filter>
     </ClCompile>
+    <ClCompile Include="Cartridge.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
     <ClCompile Include="Emulator.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

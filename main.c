@@ -5,7 +5,8 @@ int main(int argc, char** argv) {
 
 	test_registers();
 	test_adds();
-	runEmulator(argc, argv);
+	Emulator* emulator = get_emulator();
+	runEmulator(emulator, argc, argv);
 	return 0;
 
 }

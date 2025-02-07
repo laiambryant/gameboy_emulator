@@ -8,7 +8,7 @@ CPU* get_cpu() {
 	}
 	cpu->regs = get_registers();
 	cpu->fl = (Flags*)malloc(sizeof(Flags));
-	cpu->pc = ZERO;
+	cpu->pc = ZERO_HEX;
 	cpu->bus = (memory_bus*)malloc(sizeof(memory_bus));
 	return cpu;
 }
@@ -124,28 +124,30 @@ void SET(CPU* cpu, u8 bit, Register target) {
 	*get_pointer_to_register(reg, target) = result;
 }
 void SRL(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) >> ONE;
 }
 void RR(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) >> ONE;
 }
 void RL(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) << ONE;
 }
 void RRC(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) << ONE;
 }
 void RLC(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) << ONE;
 }
 void SRA(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) >> ONE;
 }
 void SLA(CPU* cpu, Register target) {
-
+	*get_pointer_to_register(reg, target) = *get_pointer_to_register(reg, target) << ONE;
 }
-void SWAP(CPU* cpu, Register target) {
-
+void SWAP(CPU* cpu, Register target1, Register target2) {
+	u8 temp = *get_pointer_to_register(reg, target1);
+	*get_pointer_to_register(reg, target1) = *get_pointer_to_register(reg, target2);
+	*get_pointer_to_register(reg, target2) = temp;
 }
 void setFlagSubtract(CPU* cpu, InstructionName instruction_name){
 	if (instruction_name == INSTR_SUB 
@@ -154,14 +156,14 @@ void setFlagSubtract(CPU* cpu, InstructionName instruction_name){
 		cpu->fl->subtract = ONE;
 }
 void setFlagZero(CPU* cpu, u16 result) {
-	if (result == ZERO)
+	if (result == ZERO_HEX)
 		cpu->fl->zero = ONE;
-	else cpu->fl->zero = ZERO;
+	else cpu->fl->zero = ZERO_HEX;
 }
 void setFlagCarry(CPU* cpu, u16 result) {
 	if (result - 1 > MAX_16_BIT)
 		cpu->fl->carry = ONE;
-	else cpu->fl->carry = ZERO;
+	else cpu->fl->carry = ZERO_HEX;
 }
 void setFlagHalfCarry(CPU* cpu, u16 result) {
 	result = result << 8;
@@ -173,7 +175,6 @@ void checkFlags8(CPU* cpu, u16 result, InstructionName instruction_name) {
 	setFlagSubtract(cpu, instruction_name);
 	setFlagHalfCarry(cpu, result);
 }
-
 void checkFlags16(CPU* cpu, u32 result, InstructionName instruction_name) {
 	setFlagCarry(cpu, result);
 	setFlagZero(cpu, result);

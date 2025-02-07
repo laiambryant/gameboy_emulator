@@ -1,0 +1,31 @@
+#pragma once
+#include "Common.h"
+
+typedef struct rom_header {
+    u8 entry[4];
+    u8 logo[0x30];
+    char title[16];
+    u16 new_lic_code;
+    u8 sgb_flag;
+    u8 type;
+    u8 rom_size;
+    u8 ram_size;
+    u8 dest_code;
+    u8 lic_code;
+    u8 version;
+    u8 checksum;
+    u16 global_checksum;
+} rom_header;
+
+typedef struct cartridge_context {
+    char filename[1024];
+    u32 rom_size;
+    u8* rom_data;
+    rom_header* header;
+} cartridge_context;
+
+static cartridge_context* ctx; 
+
+int cart_load(char* cart);
+void print_debug();
+int read_rom(char* cart);
