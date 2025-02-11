@@ -5,17 +5,19 @@ void runEmulator(Emulator* emulator, int argc, char** argv) {
 		emulator->front_end = create_front_end("Emulator");
 		init_front_end(emulator->front_end, "Emulator");
 	}
+	cartridge_context* ctx = init_cart("tests\\roms\\pokemonRed.gb");
 	printf("Running emulator...\n");
 	while (emulator->running) {
 		if (!emulator->paused) {
 			emulator->ticks++;
-			delay(10);
+			delay(1000);
 			printf("Ticks: %d\n", emulator->ticks);
-			if (!cart_load("")) {
-				emulator->running = 1;
-			}
+		}
+		if (emulator->ticks >= 10) {
+			emulator->running = 0;
 		}
 	}
+	destroy_cart(ctx);
 	free_front_end(emulator->front_end);
 }
 

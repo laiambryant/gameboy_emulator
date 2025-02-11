@@ -1,5 +1,11 @@
 #include "Cartridge.h"
 
+static const u8 LIC_CODE_SIZE = 0xA4;
+static const u8 CART_TYPE_SIZE = 0x22;
+static const u16 ROM_HEADER_END = 0x100;
+static const u16 CHECKSUM_START = 0x0134;
+static const u16 CHECKSUM_END = 0x014C;
+
 static const char* ROM_TYPES[] = {
     "ROM ONLY",
     "MBC1",
@@ -102,35 +108,52 @@ static const char* LIC_CODE[0xA5] = {
     [0xA4] = "Konami (Yu-Gi-Oh!)"
 };
 
-const char* cart_lic_name() {
-    if (ctx->header->new_lic_code <= 0xA4) {
+cartridge_context* init_cart(char* cartridge_path) {
+	cartridge_context* ctx = malloc(sizeof(cartridge_context));
+	if (ctx == NULL) {
+		printf("Failed to allocate memory for cartridge context\n");
+		return NULL;
+	}
+    cart_load(ctx, cartridge_path);
+	return ctx;
+}
+
+int destroy_cart(cartridge_context* ctx) {
+	free(ctx->rom_data);
+	free(ctx);
+	return 0;
+}
+
+const char* cart_lic_name(cartridge_context* ctx) {
+    if (ctx->header->new_lic_code <= LIC_CODE_SIZE) {
         return LIC_CODE[ctx->header->lic_code];
     }
     return "UNKNOWN";
 }
-const char* cart_type_name() {
-    if (ctx->header->type <= 0x22) {
+
+const char* cart_type_name(cartridge_context* ctx) {
+    if (ctx->header->type <= CART_TYPE_SIZE) {
         return ROM_TYPES[ctx->header->type];
     }
     return "UNKNOWN";
 }
 
-int cart_load(char* cart) {
+int cart_load(cartridge_context* ctx, char* cart) {
     snprintf(ctx->filename, sizeof(ctx->filename), "%s", cart);
-	if (!read_rom(cart)) 
+	if (!read_rom(ctx,cart)) 
         return 1;
-    ctx->header = (rom_header*)(ctx->rom_data + 0x100);
+    ctx->header = (rom_header*)(ctx->rom_data + ROM_HEADER_END);
     ctx->header->title[15] = 0;
-	print_debug();
+	print_debug(ctx);
     u16 x = 0;
-    for (u16 i = 0x0134; i <= 0x014C; i++) {
+    for (u16 i = CHECKSUM_START; i <= CHECKSUM_END; i++) {
         x = x - ctx->rom_data[i] - 1;
     }
     printf("\t Checksum : %2.2X (%s)\n", ctx->header->checksum, (x & 0xFF) ? "PASSED" : "FAILED");
     return 0;
 }
 
-int read_rom(char* cart) {
+int read_rom(cartridge_context* ctx, char* cart) {
     FILE* fd = fopen(cart, "r");
     if (!fd) {
         printf("Failed to open: %s\n", cart);
@@ -139,24 +162,26 @@ int read_rom(char* cart) {
     printf("Opened: %s\n", ctx->filename);
     fseek(fd, 0, SEEK_END);
     ctx->rom_size = ftell(fd);
+    printf("Rom Size: %d bytes\n", ctx->rom_size);
     rewind(fd);
     ctx->rom_data = malloc(ctx->rom_size);
-    fclose(fd);
+    printf("Allocated: %d bytes\n", ctx->rom_size);
     if (ctx->rom_data == NULL) {
         printf("Failed to allocate memory for ROM\n");
         fclose(fd);
         return 1;
     }
     fread(ctx->rom_data, ctx->rom_size, 1, fd);
+    fclose(fd);  
 	return 0;
 }
 
-void print_debug() {
+void print_debug(cartridge_context* ctx) {
     printf("Cartridge Loaded:\n");
     printf("\t Title    : %s\n", ctx->header->title);
-    printf("\t Type     : %2.2X (%s)\n", ctx->header->type, cart_type_name());
+    printf("\t Type     : %2.2X (%s)\n", ctx->header->type, cart_type_name(ctx));
     printf("\t ROM Size : %d KB\n", 32 << ctx->header->rom_size);
     printf("\t RAM Size : %2.2X\n", ctx->header->ram_size);
-    printf("\t LIC Code : %2.2X (%s)\n", ctx->header->lic_code, cart_lic_name());
+    printf("\t LIC Code : %2.2X (%s)\n", ctx->header->lic_code, cart_lic_name(ctx));
     printf("\t ROM Vers : %2.2X\n", ctx->header->version);
 }

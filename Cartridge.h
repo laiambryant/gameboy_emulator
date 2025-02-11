@@ -24,8 +24,7 @@ typedef struct cartridge_context {
     rom_header* header;
 } cartridge_context;
 
-static cartridge_context* ctx; 
-
-int cart_load(char* cart);
-void print_debug();
-int read_rom(char* cart);
+cartridge_context* init_cart(char* cartridge_path);
+int cart_load(cartridge_context* ctx, char* cart);
+void print_debug(cartridge_context* ctx);
+int read_rom(cartridge_context* ctx, char* cart);
