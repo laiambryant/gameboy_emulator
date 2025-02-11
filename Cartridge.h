@@ -28,3 +28,6 @@ cartridge_context* init_cart(char* cartridge_path);
 int cart_load(cartridge_context* ctx, char* cart);
 void print_debug(cartridge_context* ctx);
 int read_rom(cartridge_context* ctx, char* cart);
+void destroy_cart(cartridge_context* ctx);
+u8 cart_read( u16 address);
+void cart_write( u16 address, u8 data);

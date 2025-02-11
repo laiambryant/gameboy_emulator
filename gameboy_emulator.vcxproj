@@ -19,20 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bus.h" />
     <ClInclude Include="Cartridge.h" />
     <ClInclude Include="Cpu.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Emulator.h" />
     <ClInclude Include="front_end.h" />
+    <ClInclude Include="Instruction.h" />
     <ClInclude Include="memory_bus.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="Registers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\SDLTest1\front_end.c" />
+    <ClCompile Include="bus.c" />
     <ClCompile Include="Cartridge.c" />
     <ClCompile Include="Cpu.c" />
     <ClCompile Include="Emulator.c" />
+    <ClCompile Include="Instruction.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Registers.c" />
     <ClCompile Include="tests.c" />

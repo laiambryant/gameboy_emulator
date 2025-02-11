@@ -6,12 +6,20 @@ void runEmulator(Emulator* emulator, int argc, char** argv) {
 		init_front_end(emulator->front_end, "Emulator");
 	}
 	cartridge_context* ctx = init_cart("tests\\roms\\pokemonRed.gb");
+	if (!ctx) {
+		printf("Failed to load cartridge\n");
+		return;
+	}
+	CPU* cpu = get_cpu();
 	printf("Running emulator...\n");
 	while (emulator->running) {
 		if (!emulator->paused) {
 			emulator->ticks++;
 			delay(1000);
 			printf("Ticks: %d\n", emulator->ticks);
+		}
+		if (!step(cpu)) {
+			emulator->running = 0;
 		}
 		if (emulator->ticks >= 10) {
 			emulator->running = 0;

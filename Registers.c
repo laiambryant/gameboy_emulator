@@ -19,16 +19,18 @@ void init_registers(Registers* registers) {
 		registers->e = 0;
 		registers->h = 0;
 		registers->l = 0;
+		registers->sp = 0;
+		registers->pc = 0;
 	}
 }
 
-uint16_t get_register_combination(Registers* registers, Register register1, Register register2) {
+u16 get_register_combination(Registers* registers, Register register1, Register register2) {
     if (registers)
         return (get_register(registers, register1) << 8) | get_register(registers, register2);
     return 1;
 }
 
-uint16_t set_register_combination(Registers* registers, Register register1, Register register2, uint16_t value) {
+u16 set_register_combination(Registers* registers, Register register1, Register register2, u16 value) {
 	if (registers) {
 		set_register(registers, register1, value >> 8);
 		set_register(registers, register2, value & 0xFF);
@@ -37,29 +39,42 @@ uint16_t set_register_combination(Registers* registers, Register register1, Regi
     return 1;
 }
 
-uint8_t get_register(Registers* registers, Register reg) {
+u16 get_register(Registers* registers, Register reg) {
     switch (reg) {
-        case A: return registers->a;
-        case B: return registers->b;
-        case C: return registers->c;
-        case D: return registers->d;
-        case E: return registers->e;
-        case H: return registers->h;
-        case L: return registers->l;
+        case R_A: return registers->a;
+        case R_B: return registers->b;
+        case R_C: return registers->c;
+        case R_D: return registers->d;
+        case R_E: return registers->e;
+        case R_H: return registers->h;
+        case R_L: return registers->l;
+		case R_BC: return get_register_combination(registers, R_B, R_C);
+		case R_DE: return get_register_combination(registers, R_D, R_E);
+		case R_HL: return get_register_combination(registers, R_H, R_L);
+        case R_SP : return registers->sp;
+		case R_PC : return registers->pc;
         default: return 1; 
     }
 }
-uint8_t set_register(Registers* registers, Register reg, uint8_t value) {
+void set_register(Registers* registers, Register reg, u16 value) {
     switch (reg) {
-	case A: registers->a = value; return 0;
-	case B: registers->b = value; return 0;
-	case C: registers->c = value; return 0;
-	case D: registers->d = value; return 0;
-	case E: registers->e = value; return 0;
-	case H: registers->h = value; return 0;
-	case L: registers->l = value; return 0;
-	default: return 1; 
+	case R_A: registers->a = value; break;
+	case R_B: registers->b = value; break;
+	case R_C: registers->c = value; break;
+	case R_D: registers->d = value; break;
+	case R_E: registers->e = value; break;
+	case R_H: registers->h = value; break;
+	case R_L: registers->l = value; break;
+	case R_BC: set_register_combination(registers, R_B, R_C, value); break;
+	case R_DE: set_register_combination(registers, R_D, R_E, value); break;
+	case R_HL: set_register_combination(registers, R_H, R_L, value); break;
+	case R_SP: registers->sp = value; break;
+	case R_PC: registers->pc = value; break;
+	default: break;
     }
+}
+u16 getAFregister() {
+
 }
 
 void print_registers(Registers* registers) {
@@ -71,18 +86,22 @@ void print_registers(Registers* registers) {
 		printf("E: %d\n", registers->e);
 		printf("H: %d\n", registers->h);
 		printf("L: %d\n", registers->l);
+		printf("SP: %d\n", registers->sp);
+		printf("PC: %d\n", registers->pc);
 	}
 }
 
-uint8_t* get_pointer_to_register(Registers* registers, Register reg) {
+u8* get_pointer_to_register(Registers* registers, Register reg) {
 	switch (reg) {
-	case A: return &registers->a;
-	case B: return &registers->b;
-	case C: return &registers->c;
-	case D: return &registers->d;
-	case E: return &registers->e;
-	case H: return &registers->h;
-	case L: return &registers->l;
+	case R_A: return &registers->a;
+	case R_B: return &registers->b;
+	case R_C: return &registers->c;
+	case R_D: return &registers->d;
+	case R_E: return &registers->e;
+	case R_H: return &registers->h;
+	case R_L: return &registers->l;
+	case R_SP: return &registers->sp;
+	case R_PC: return &registers->pc;
 	default: return NULL;
 	}
 }

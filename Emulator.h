@@ -1,7 +1,11 @@
 #pragma once
 #include "Common.h"
 #include "front_end.h"
+#ifndef CARTRIDGE
+#define	CARTRIDGE
 #include "Cartridge.h"
+#endif 
+#include "Cpu.h"
 
 typedef struct Emulator {
 	int running;
@@ -10,7 +14,6 @@ typedef struct Emulator {
 	FrontEnd* front_end;
 } Emulator;
 
-static Emulator* emulator_ctx ;
 
 void runEmulator(Emulator* emulator, int argc, char** argv);
 Emulator* get_emulator();

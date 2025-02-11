@@ -48,6 +48,12 @@
     <ClInclude Include="Cartridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -70,6 +76,12 @@
     </ClCompile>
     <ClCompile Include="Emulator.c">
       <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="bus.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="Instruction.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
