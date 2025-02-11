@@ -17,6 +17,7 @@ void init_registers(Registers* registers) {
 		registers->c = 0;
 		registers->d = 0;
 		registers->e = 0;
+		registers->f = 0;
 		registers->h = 0;
 		registers->l = 0;
 		registers->sp = 0;
@@ -48,6 +49,7 @@ u16 get_register(Registers* registers, Register reg) {
         case R_E: return registers->e;
         case R_H: return registers->h;
         case R_L: return registers->l;
+		case R_F: return registers->f;
 		case R_BC: return get_register_combination(registers, R_B, R_C);
 		case R_DE: return get_register_combination(registers, R_D, R_E);
 		case R_HL: return get_register_combination(registers, R_H, R_L);
@@ -65,6 +67,7 @@ void set_register(Registers* registers, Register reg, u16 value) {
 	case R_E: registers->e = value; break;
 	case R_H: registers->h = value; break;
 	case R_L: registers->l = value; break;
+	case R_F: registers->f = value; break;
 	case R_BC: set_register_combination(registers, R_B, R_C, value); break;
 	case R_DE: set_register_combination(registers, R_D, R_E, value); break;
 	case R_HL: set_register_combination(registers, R_H, R_L, value); break;

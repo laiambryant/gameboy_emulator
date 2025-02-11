@@ -6,6 +6,8 @@
 #include "bus.h"
 
 #define reg cpu->regs
+#define CPU_FLAG_Z BIT(cpu.regs.f, 7)
+#define CPU_FLAG_C BIT(cpu.regs.f, 4)
 
 typedef struct CPU {
     Registers regs;
@@ -16,29 +18,26 @@ typedef struct CPU {
 	u8 is_halted;
     u8 is_stepping;
     u8 is_dest_mem;
+    u8 int_master_enabled;
     u16 pc;
-	Instruction curr_instr;
-    memory_bus* bus;
+	Instruction* curr_instr;
+    u8 cycles;
 } CPU;
 
+typedef void (*instruction_func)(CPU* cpu);
 
 // CPU functions
 CPU* get_cpu();
 // Destroys the CPU
 void destroy_cpu(CPU* cpu);
-// Sets flag bit to 1 if the result of an operation is overflowing
-void setFlagSubtract(CPU* cpu, InstructionName instruction_name);
-// Sets flag bit to 1 if the result of an operation is zero
-void setFlagZero(CPU* cpu, u16 result);
-// Sets flag bit to 1 if the result of an operation is carrying
-void setFlagCarry(CPU* cpu, u16 result);
-// Sets flag bit to 1 if the result of an operation is half carrying
-void setFlagHalfCarry(CPU* cpu, u16 result);
-// Performs all flag checks for 8 bit operations
-void checkFlags8(CPU* cpu, u16 result, InstructionName instruction_name);
-// Performs all flag checks for 16 bit operations
-void checkFlags16(CPU* cpu, u32 result, InstructionName instruction_name);
 int step(CPU* cpu);
+//Fetches the current instruction
 void fetch_instruction(CPU* cpu);
+//Fetches the data for the current instruction
 void fetch_data(CPU* cpu);
-void execute(CPU* cpu);
+//Executes the current instruction
+void execute();
+//TODO: Implement
+void cycles(u8 cycle);
+instruction_func instruction_get_processor(InstructionName type);
+char* get_instruction_name(u8 opcode);

@@ -8,6 +8,6 @@ Instruction instructions[0x100] = {
 	[0xC3]={INSTR_JP, AM_D16}
 };
 
-Instruction get_instruction(u8 opcode) {
-	return instructions[opcode];
+Instruction* get_instruction(u8 opcode) {
+	return &instructions[opcode];
 }

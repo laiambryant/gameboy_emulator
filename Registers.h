@@ -2,16 +2,18 @@
 #include "Common.h"
 
 typedef struct Registers {
-    u8 a, b, c, d, e, h, l;
+    u8 a, b, c, d, e, f, h, l;
 	u16 sp, pc;
 } Registers;
+
+
 
 typedef struct Flags {
 	u8 zero, subtract, half_carry, carry;
 } Flags;
 
 typedef enum Register {
-	R_NONE, R_A, R_B, R_C, R_D, R_E, R_H, R_L,
+	R_NONE, R_A, R_F, R_B, R_C, R_D, R_E, R_H, R_L,
 	R_AF, R_BC, R_DE, R_HL, R_SP, R_PC
 } Register;
 

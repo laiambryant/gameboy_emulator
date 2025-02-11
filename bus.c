@@ -2,7 +2,7 @@
 
 u8 bus_read( u16 addr) {
 	if (addr >= ROM_BANK_0_START && addr <= ROM_BANK_0_END) {
-		return cart_read( addr);
+		return cart_read(addr);
 	}
 	if (addr >= ROM_BANK_1_START && addr <= ROM_BANK_1_END) {
 		return 0;

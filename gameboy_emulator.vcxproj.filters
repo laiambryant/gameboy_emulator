@@ -54,6 +54,9 @@
     <ClInclude Include="Instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cpu_proc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -81,6 +84,9 @@
       <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="Instruction.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpu_proc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,11 +27,11 @@ typedef enum condition_type {
 
 typedef struct Instruction {
     InstructionName instruction_name;
+    addressing_mode mode;
 	Register reg1;
     Register reg2;
-	addressing_mode mode;
 	condition_type condition;
     u8 param;
 } Instruction;
 
-Instruction get_instruction(u8 opcode);
+Instruction* get_instruction(u8 opcode);
