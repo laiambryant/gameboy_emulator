@@ -1,43 +1,64 @@
 #pragma once
-#include "Registers.h"
-#include "memory_bus.h"
-#include "Common.h"
-#include "Instruction.h"
-#include "bus.h"
+#include "common.h"
+#include "instructions.h"
 
-#define reg cpu->regs
-#define CPU_FLAG_Z BIT(cpu.regs.f, 7)
-#define CPU_FLAG_C BIT(cpu.regs.f, 4)
-
-typedef struct CPU {
-    Registers regs;
-    Flags fl;
-    u16 fetched_data;
-    u16 memory_destination;
-	u8 curr_opcode;
-	u8 is_halted;
-    u8 is_stepping;
-    u8 is_dest_mem;
-    u8 int_master_enabled;
+typedef struct {
+    u8 a;
+    u8 f;
+    u8 b;
+    u8 c;
+    u8 d;
+    u8 e;
+    u8 h;
+    u8 l;
     u16 pc;
-	Instruction* curr_instr;
-    u8 cycles;
-} CPU;
+    u16 sp;
+} cpu_registers;
 
-typedef void (*instruction_func)(CPU* cpu);
+typedef struct {
+    cpu_registers regs;
 
-// CPU functions
-CPU* get_cpu();
-// Destroys the CPU
-void destroy_cpu(CPU* cpu);
-int step(CPU* cpu);
-//Fetches the current instruction
-void fetch_instruction(CPU* cpu);
-//Fetches the data for the current instruction
-void fetch_data(CPU* cpu);
-//Executes the current instruction
-void execute();
-//TODO: Implement
-void cycles(u8 cycle);
-instruction_func instruction_get_processor(InstructionName type);
-char* get_instruction_name(u8 opcode);
+    //current fetch...
+    u16 fetched_data;
+    u16 mem_dest;
+    bool dest_is_mem;
+    u8 cur_opcode;
+    instruction* cur_inst;
+
+    bool halted;
+    bool stepping;
+
+    bool int_master_enabled;
+    bool enabling_ime;
+    u8 ie_register;
+    u8 int_flags;
+
+} cpu_context;
+
+cpu_registers* cpu_get_regs();
+
+void cpu_init();
+bool cpu_step();
+
+typedef void (*IN_PROC)(cpu_context*);
+
+IN_PROC inst_get_processor(in_type type);
+
+#define CPU_FLAG_Z BIT(ctx->regs.f, 7)
+#define CPU_FLAG_N BIT(ctx->regs.f, 6)
+#define CPU_FLAG_H BIT(ctx->regs.f, 5)
+#define CPU_FLAG_C BIT(ctx->regs.f, 4)
+
+u16 cpu_read_reg(reg_type rt);
+void cpu_set_reg(reg_type rt, u16 val);
+
+u8 cpu_get_ie_register();
+void cpu_set_ie_register(u8 n);
+
+u8 cpu_read_reg8(reg_type rt);
+void cpu_set_reg8(reg_type rt, u8 val);
+
+u8 cpu_get_int_flags();
+void cpu_set_int_flags(u8 value);
+
+void inst_to_str(cpu_context* ctx, char* str);

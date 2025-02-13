@@ -16,45 +16,60 @@
     <Filter Include="Source Files\components">
       <UniqueIdentifier>{c6b82eff-f733-42de-bb3e-91323629b357}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\test">
-      <UniqueIdentifier>{1a364e03-5981-40a9-ab97-26b0faf643ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\frontend">
       <UniqueIdentifier>{09c308d5-3bcd-4036-8b4d-1bbda7a8bc03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Registers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tests.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cpu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="memory_bus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="front_end.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Emulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cartridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Instruction.h">
+    <ClInclude Include="stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cpu_proc.h">
+    <ClInclude Include="ui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ppu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gamepad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lcd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dma.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ppu_sm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interrupts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GitHub\LLD_gbemu\part16\include\instructions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GitHub\LLD_gbemu\part16\include\dbg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cpu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,31 +77,64 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Registers.c">
-      <Filter>Source Files\components</Filter>
-    </ClCompile>
-    <ClCompile Include="tests.c">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="Cpu.c">
-      <Filter>Source Files\components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SDLTest1\front_end.c">
-      <Filter>Source Files\frontend</Filter>
-    </ClCompile>
-    <ClCompile Include="Cartridge.c">
-      <Filter>Source Files\components</Filter>
-    </ClCompile>
-    <ClCompile Include="Emulator.c">
-      <Filter>Source Files\components</Filter>
-    </ClCompile>
-    <ClCompile Include="bus.c">
-      <Filter>Source Files\components</Filter>
-    </ClCompile>
-    <ClCompile Include="Instruction.c">
+    <ClCompile Include="cpu_proc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpu_proc.c">
+    <ClCompile Include="gamepad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dma.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ppu_sm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="interrupts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ram.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="io.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bus.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lcd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ppu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\ppu_pipeline.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\instructions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\emu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cpu_util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cpu_fetch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cart.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
