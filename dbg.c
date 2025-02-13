@@ -1,7 +1,7 @@
-#include <dbg.h>
-#include <bus.h>
+#include "dbg.h"
+#include "bus.h"
 
-static char dbg_msg[1024] = {0};
+static char dbg_msg[1024] = { 0 };
 static int msg_size = 0;
 
 void dbg_update() {

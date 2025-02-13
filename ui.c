@@ -22,30 +22,20 @@ void ui_init() {
     
     SDL_Init(SDL_INIT_VIDEO);
     printf("SDL INIT\n");
-    TTF_Init();
-    printf("TTF INIT\n");
 
-    SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &sdlWindow, &sdlRenderer);
+    SDL_CreateWindowAndRenderer("Window", SCREEN_WIDTH, SCREEN_HEIGHT, 0, &sdlWindow, &sdlRenderer);
 
-    screen = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32,
-                                            0x00FF0000,
-                                            0x0000FF00,
-                                            0x000000FF,
-                                            0xFF000000);
+    screen = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_ARGB8888);
     sdlTexture = SDL_CreateTexture(sdlRenderer,
                                                 SDL_PIXELFORMAT_ARGB8888,
                                                 SDL_TEXTUREACCESS_STREAMING,
                                                 SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    SDL_CreateWindowAndRenderer(16 * 8 * scale, 32 * 8 * scale, 0, 
+    SDL_CreateWindowAndRenderer("Debug Window", 16 * 8 * scale, 32 * 8 * scale, 0, 
         &sdlDebugWindow, &sdlDebugRenderer);
 
-    debugScreen = SDL_CreateRGBSurface(0, (16 * 8 * scale) + (16 * scale), 
-                                            (32 * 8 * scale) + (64 * scale), 32,
-                                            0x00FF0000,
-                                            0x0000FF00,
-                                            0x000000FF,
-                                            0xFF000000);
+    debugScreen = SDL_CreateSurface( (16 * 8 * scale) + (16 * scale),
+                                            (32 * 8 * scale) + (64 * scale),SDL_PIXELFORMAT_ARGB8888);
 
     sdlDebugTexture = SDL_CreateTexture(sdlDebugRenderer,
                                             SDL_PIXELFORMAT_ARGB8888,
@@ -86,7 +76,7 @@ void display_tile(SDL_Surface *surface, u16 startLocation, u16 tileNum, int x, i
             rc.w = scale;
             rc.h = scale;
 
-            SDL_FillRect(surface, &rc, tile_colors[color]);
+            SDL_FillSurfaceRect(surface, &rc, tile_colors[color]);
         }
     }
 }
@@ -101,7 +91,7 @@ void update_dbg_window() {
     rc.y = 0;
     rc.w = debugScreen->w;
     rc.h = debugScreen->h;
-    SDL_FillRect(debugScreen, &rc, 0xFF111111);
+    SDL_FillSurfaceRect(debugScreen, &rc, 0xFF111111);
 
     u16 addr = 0x8000;
 
@@ -119,7 +109,7 @@ void update_dbg_window() {
 
 	SDL_UpdateTexture(sdlDebugTexture, NULL, debugScreen->pixels, debugScreen->pitch);
 	SDL_RenderClear(sdlDebugRenderer);
-	SDL_RenderCopy(sdlDebugRenderer, sdlDebugTexture, NULL, NULL);
+	SDL_RenderTexture(sdlDebugRenderer, sdlDebugTexture, NULL, NULL);
 	SDL_RenderPresent(sdlDebugRenderer);
 }
 
@@ -137,13 +127,13 @@ void ui_update() {
             rc.w = scale;
             rc.h = scale;
 
-            SDL_FillRect(screen, &rc, video_buffer[x + (line_num * XRES)]);
+            SDL_FillSurfaceRect(screen, &rc, video_buffer[x + (line_num * XRES)]);
         }
     }
 
     SDL_UpdateTexture(sdlTexture, NULL, screen->pixels, screen->pitch);
     SDL_RenderClear(sdlRenderer);
-    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
+    SDL_RenderTexture(sdlRenderer, sdlTexture, NULL, NULL);
     SDL_RenderPresent(sdlRenderer);
 
     update_dbg_window();
@@ -168,15 +158,15 @@ void ui_handle_events() {
     SDL_Event e;
     while (SDL_PollEvent(&e) > 0)
     {
-        if (e.type == SDL_KEYDOWN) {
-            ui_on_key(true, e.key.keysym.sym);
+        if (e.type == SDL_EVENT_KEY_DOWN) {
+            ui_on_key(true, e.key.down);
         }
 
-        if (e.type == SDL_KEYUP) {
-            ui_on_key(false, e.key.keysym.sym);
+        if (e.type == SDL_EVENT_KEY_DOWN) {
+            ui_on_key(false, e.key.down);
         }
 
-        if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_CLOSE) {
+        if (e.window.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED) {
             emu_get_context()->die = true;
         }
     }

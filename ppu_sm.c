@@ -18,7 +18,7 @@ void increment_ly() {
     lcd_get_context()->ly++;
 
     if (lcd_get_context()->ly == lcd_get_context()->ly_compare) {
-        LCDS_LYC_SET(1);
+         if (1) lcd_get_context()->lcds |= (1 << 2); else lcd_get_context()->lcds &= ~(1 << 2);
 
         if (LCDS_STAT_INT(SS_LYC)) {
             cpu_request_interrupt(IT_LCD_STAT);

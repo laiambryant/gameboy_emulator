@@ -52,7 +52,7 @@ bool cpu_step() {
 
 #if CPU_DEBUG == 1
         char flags[16];
-        sprintf(flags, "%c%c%c%c",
+        sprintf_s(flags, sizeof(flags), "%c%c%c%c",
             ctx.regs.f & (1 << 7) ? 'Z' : '-',
             ctx.regs.f & (1 << 6) ? 'N' : '-',
             ctx.regs.f & (1 << 5) ? 'H' : '-',

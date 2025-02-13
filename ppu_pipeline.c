@@ -1,6 +1,6 @@
-#include <ppu.h>
-#include <lcd.h>
-#include <bus.h>
+#include "ppu.h"
+#include "lcd.h"
+#include "bus.h"
 
 bool window_visible() {
     return LCDC_WIN_ENABLE && lcd_get_context()->win_x >= 0 &&
@@ -10,11 +10,7 @@ bool window_visible() {
 
 void pixel_fifo_push(u32 value) {
     fifo_entry *next = malloc(sizeof(fifo_entry));
-    next->next = NULL;
-    next->value = value;
-
     if (!ppu_get_context()->pfc.pixel_fifo.head) {
-        //first entry...
         ppu_get_context()->pfc.pixel_fifo.head = ppu_get_context()->pfc.pixel_fifo.tail = next;
     } else {
         ppu_get_context()->pfc.pixel_fifo.tail->next = next;

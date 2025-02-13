@@ -39,9 +39,6 @@
     <ClInclude Include="gamepad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lcd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="dma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,16 +57,13 @@
     <ClInclude Include="timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GitHub\LLD_gbemu\part16\include\instructions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GitHub\LLD_gbemu\part16\include\dbg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cpu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lcd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,25 +110,28 @@
     <ClCompile Include="ui.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\ppu_pipeline.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\instructions.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\emu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cpu_util.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cpu_fetch.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cart.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cpu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpu_fetch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dbg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="emu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ppu_pipeline.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="instructions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cpu_util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cart.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

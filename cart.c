@@ -1,24 +1,24 @@
-#include <cart.h>
+#include "cart.h"
 #include <string.h>
 
 typedef struct {
     char filename[1024];
     u32 rom_size;
-    u8 *rom_data;
-    rom_header *header;
+    u8* rom_data;
+    rom_header* header;
 
     //mbc1 related data
     bool ram_enabled;
     bool ram_banking;
 
-    u8 *rom_bank_x;
+    u8* rom_bank_x;
     u8 banking_mode;
 
     u8 rom_bank_value;
     u8 ram_bank_value;
 
-    u8 *ram_bank; //current selected ram bank
-    u8 *ram_banks[16]; //all ram banks
+    u8* ram_bank; //current selected ram bank
+    u8* ram_banks[16]; //all ram banks
 
     //for battery
     bool battery; //has battery
@@ -40,7 +40,7 @@ bool cart_battery() {
     return ctx.header->type == 3;
 }
 
-static const char *ROM_TYPES[] = {
+static const char* ROM_TYPES[] = {
     "ROM ONLY",
     "MBC1",
     "MBC1+RAM",
@@ -78,7 +78,7 @@ static const char *ROM_TYPES[] = {
     "MBC7+SENSOR+RUMBLE+RAM+BATTERY",
 };
 
-static const char *LIC_CODE[0xA5] = {
+static const char* LIC_CODE[0xA5] = {
     [0x00] = "None",
     [0x01] = "Nintendo R&D1",
     [0x08] = "Capcom",
@@ -136,13 +136,13 @@ static const char *LIC_CODE[0xA5] = {
     [0x92] = "Video system",
     [0x93] = "Ocean/Acclaim",
     [0x95] = "Varie",
-    [0x96] = "Yonezawa/sâ€™pal",
+    [0x96] = "Yonezawa/s’pal",
     [0x97] = "Kaneko",
     [0x99] = "Pack in soft",
     [0xA4] = "Konami (Yu-Gi-Oh!)"
 };
 
-const char *cart_lic_name() {
+const char* cart_lic_name() {
     if (ctx.header->new_lic_code <= 0xA4) {
         return LIC_CODE[ctx.header->lic_code];
     }
@@ -150,7 +150,7 @@ const char *cart_lic_name() {
     return "UNKNOWN";
 }
 
-const char *cart_type_name() {
+const char* cart_type_name() {
     if (ctx.header->type <= 0x22) {
         return ROM_TYPES[ctx.header->type];
     }
@@ -159,12 +159,12 @@ const char *cart_type_name() {
 }
 
 void cart_setup_banking() {
-    for (int i=0; i<16; i++) {
+    for (int i = 0; i < 16; i++) {
         ctx.ram_banks[i] = 0;
 
         if ((ctx.header->ram_size == 2 && i == 0) ||
-            (ctx.header->ram_size == 3 && i < 4) || 
-            (ctx.header->ram_size == 4 && i < 16) || 
+            (ctx.header->ram_size == 3 && i < 4) ||
+            (ctx.header->ram_size == 4 && i < 16) ||
             (ctx.header->ram_size == 5 && i < 8)) {
             ctx.ram_banks[i] = malloc(0x2000);
             memset(ctx.ram_banks[i], 0, 0x2000);
@@ -175,10 +175,10 @@ void cart_setup_banking() {
     ctx.rom_bank_x = ctx.rom_data + 0x4000; //rom bank 1
 }
 
-bool cart_load(char *cart) {
+bool cart_load(char* cart) {
     snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
 
-    FILE *fp = fopen(cart, "r");
+    FILE* fp = fopen("tests/roms/pokemonRed.gb", "r");
 
     if (!fp) {
         printf("Failed to open: %s\n", cart);
@@ -196,7 +196,7 @@ bool cart_load(char *cart) {
     fread(ctx.rom_data, ctx.rom_size, 1, fp);
     fclose(fp);
 
-    ctx.header = (rom_header *)(ctx.rom_data + 0x100);
+    ctx.header = (rom_header*)(ctx.rom_data + 0x100);
     ctx.header->title[15] = 0;
     ctx.battery = cart_battery();
     ctx.need_save = false;
@@ -212,7 +212,7 @@ bool cart_load(char *cart) {
     cart_setup_banking();
 
     u16 x = 0;
-    for (u16 i=0x0134; i<=0x014C; i++) {
+    for (u16 i = 0x0134; i <= 0x014C; i++) {
         x = x - ctx.rom_data[i] - 1;
     }
 
@@ -231,8 +231,8 @@ void cart_battery_load() {
     }
 
     char fn[1048];
-    sprintf(fn, "%s.battery", ctx.filename);
-    FILE *fp = fopen(fn, "rb");
+    sprintf_s(fn, sizeof(fn), "%s.battery", ctx.filename);
+    FILE* fp = fopen(fn, "rb");
 
     if (!fp) {
         fprintf(stderr, "FAILED TO OPEN: %s\n", fn);
@@ -249,8 +249,8 @@ void cart_battery_save() {
     }
 
     char fn[1048];
-    sprintf(fn, "%s.battery", ctx.filename);
-    FILE *fp = fopen(fn, "wb");
+    sprintf_s(fn, sizeof(fn), "%s.battery", ctx.filename);
+    FILE* fp = fopen(fn, "wb");
 
     if (!fp) {
         fprintf(stderr, "FAILED TO OPEN: %s\n", fn);
@@ -325,7 +325,7 @@ void cart_write(u16 address, u8 value) {
             if (cart_need_save()) {
                 cart_battery_save();
             }
-            
+
             ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
         }
     }

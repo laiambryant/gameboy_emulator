@@ -19,10 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\GitHub\LLD_gbemu\part16\include\dbg.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\GitHub\LLD_gbemu\part16\include\instructions.h" />
     <ClInclude Include="bus.h" />
     <ClInclude Include="cart.h" />
     <ClInclude Include="Common.h" />
@@ -40,22 +36,23 @@
     <ClInclude Include="ui.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cart.c" />
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cpu_fetch.c" />
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\cpu_util.c" />
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\emu.c" />
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\instructions.c" />
-    <ClCompile Include="..\..\GitHub\LLD_gbemu\part16\lib\ppu_pipeline.c" />
     <ClCompile Include="bus.c" />
+    <ClCompile Include="cart.c" />
     <ClCompile Include="cpu.c" />
+    <ClCompile Include="cpu_fetch.c" />
     <ClCompile Include="cpu_proc.c" />
+    <ClCompile Include="cpu_util.c" />
+    <ClCompile Include="dbg.c" />
     <ClCompile Include="dma.c" />
+    <ClCompile Include="emu.c" />
     <ClCompile Include="gamepad.c" />
+    <ClCompile Include="instructions.c" />
     <ClCompile Include="interrupts.c" />
     <ClCompile Include="io.c" />
     <ClCompile Include="lcd.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="ppu.c" />
+    <ClCompile Include="ppu_pipeline.c" />
     <ClCompile Include="ppu_sm.c" />
     <ClCompile Include="ram.c" />
     <ClCompile Include="stack.c" />
@@ -156,8 +153,9 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\liam.bryant\Documents\cpp_ws\gameboy_emulator\gameboy_emulator;C:\Users\liam.bryant\Documents\cpp_ws\libraries\SDL3-3.2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>Default</LanguageStandard_C>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

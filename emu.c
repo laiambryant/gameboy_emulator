@@ -1,17 +1,16 @@
 #include <stdio.h>
-#include <emu.h>
-#include <cart.h>
-#include <cpu.h>
-#include <ui.h>
-#include <timer.h>
-#include <dma.h>
-#include <ppu.h>
+#include <Windows.h>
+#include "emu.h"
+#include "cart.h"
+#include "cpu.h"
+#include "ui.h"
+#include "timer.h"
+#include "dma.h"
+#include "ppu.h"
 
-//TODO Add Windows Alternative...
-#include <pthread.h>
-#include <unistd.h>
 
-/* 
+
+/*
   Emu components:
 
   |Cart|
@@ -24,11 +23,11 @@
 
 static emu_context ctx;
 
-emu_context *emu_get_context() {
+emu_context* emu_get_context() {
     return &ctx;
 }
 
-void *cpu_run(void *p) {
+void* cpu_run(void* p) {
     timer_init();
     cpu_init();
     ppu_init();
@@ -37,7 +36,7 @@ void *cpu_run(void *p) {
     ctx.paused = false;
     ctx.ticks = 0;
 
-    while(ctx.running) {
+    while (ctx.running) {
         if (ctx.paused) {
             delay(10);
             continue;
@@ -52,10 +51,10 @@ void *cpu_run(void *p) {
     return 0;
 }
 
-int emu_run(int argc, char **argv) {
+int emu_run(int argc, char** argv) {
     if (argc < 2) {
-        printf("Usage: emu <rom_file>\n");
         return -1;
+    
     }
 
     if (!cart_load(argv[1])) {
@@ -66,18 +65,12 @@ int emu_run(int argc, char **argv) {
     printf("Cart loaded..\n");
 
     ui_init();
-    
-    pthread_t t1;
 
-    if (pthread_create(&t1, NULL, cpu_run, NULL)) {
-        fprintf(stderr, "FAILED TO START MAIN CPU THREAD!\n");
-        return -1;
-    }
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)cpu_run, NULL, 0, NULL);
 
     u32 prev_frame = 0;
 
-    while(!ctx.die) {
-        usleep(1000);
+    while (!ctx.die) {
         ui_handle_events();
 
         if (prev_frame != ppu_get_context()->current_frame) {
@@ -91,9 +84,9 @@ int emu_run(int argc, char **argv) {
 }
 
 void emu_cycles(int cpu_cycles) {
-    
-    for (int i=0; i<cpu_cycles; i++) {
-        for (int n=0; n<4; n++) {
+
+    for (int i = 0; i < cpu_cycles; i++) {
+        for (int n = 0; n < 4; n++) {
             ctx.ticks++;
             timer_tick();
             ppu_tick();
