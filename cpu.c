@@ -20,7 +20,6 @@ void cpu_init() {
     ctx.int_flags = 0;
     ctx.int_master_enabled = false;
     ctx.enabling_ime = false;
-
     timer_get_context()->div = 0xABCC;
 }
 
@@ -33,19 +32,17 @@ void fetch_data();
 
 static void execute() {
     IN_PROC proc = inst_get_processor(ctx.cur_inst->type);
-
     if (!proc) {
         NO_IMPL
     }
-
     proc(&ctx);
 }
 
 bool cpu_step() {
 
     if (!ctx.halted) {
-        u16 pc = ctx.regs.pc;
 
+        u16 pc = ctx.regs.pc;
         fetch_instruction();
         emu_cycles(1);
         fetch_data();
@@ -59,10 +56,10 @@ bool cpu_step() {
             ctx.regs.f & (1 << 4) ? 'C' : '-'
         );
 
-        char inst[16];
+        char inst[256] = { 0 };
         inst_to_str(&ctx, inst);
 
-        printf("%08lX - %04X: %-12s (%02X %02X %02X) A: %02X F: %s BC: %02X%02X DE: %02X%02X HL: %02X%02X\n",
+        printf("%08llX - %04X: %-12s (%02X %02X %02X) A: %02X F: %s BC: %02X%02X DE: %02X%02X HL: %02X%02X\n",
             emu_get_context()->ticks,
             pc, inst, ctx.cur_opcode,
             bus_read(pc + 1), bus_read(pc + 2), ctx.regs.a, flags, ctx.regs.b, ctx.regs.c,
@@ -76,13 +73,10 @@ bool cpu_step() {
 
         dbg_update();
         dbg_print();
-
         execute();
     }
     else {
-        //is halted...
         emu_cycles(1);
-
         if (ctx.int_flags) {
             ctx.halted = false;
         }

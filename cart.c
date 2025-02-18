@@ -32,11 +32,14 @@ bool cart_need_save() {
 }
 
 bool cart_mbc1() {
-    return BETWEEN(ctx.header->type, 1, 3);
+    return BETWEEN(ctx.header->type, 0x01, 0x03);
+}
+
+bool cart_mbc3() {
+    return BETWEEN(ctx.header->type, 0x11, 0x13);
 }
 
 bool cart_battery() {
-    //mbc1 only for now...
     return ctx.header->type == 3;
 }
 
@@ -179,7 +182,7 @@ void cart_setup_banking() {
 bool cart_load(char* cart) {
     snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
 
-    FILE* fp = fopen("tests/roms/zelda.gb", "r");
+    FILE* fp = fopen("tests/roms/pokemonRed.gb", "r");
 
     if (!fp) {
         printf("Failed to open: %s\n", cart);
@@ -263,49 +266,58 @@ void cart_battery_save() {
 }
 
 u8 cart_read(u16 address) {
-    if (!cart_mbc1() || address < 0x4000) {
+    if ((!cart_mbc1() && !cart_mbc3()) || address < 0x4000) {
         return ctx.rom_data[address];
     }
+    if (cart_mbc1()) {
+        if ((address & 0xE000) == 0xA000) {
+            if (!ctx.ram_enabled) {
+                return 0xFF;
+            }
+            if (!ctx.ram_bank) {
+                return 0xFF;
 
-    if ((address & 0xE000) == 0xA000) {
-        if (!ctx.ram_enabled) {
-            return 0xFF;
+                return ctx.ram_bank[address - 0xA000];
+            }
         }
-
-        if (!ctx.ram_bank) {
-            return 0xFF;
-        }
-
-        return ctx.ram_bank[address - 0xA000];
     }
-
+    if (cart_mbc3()) {
+        if (address >= 0xA000 && address < 0xC000) {
+			if (!ctx.ram_enabled) {
+				return 0xFF;
+			}
+            if (!ctx.ram_bank) {
+                return 0xFF;
+            }
+        }
+    }
     return ctx.rom_bank_x[address - 0x4000];
 }
 
 void cart_write(u16 address, u8 value) {
-    if (!cart_mbc1()) {
+    if (!cart_mbc1() && !cart_mbc3()) {
         return;
     }
 
-    if (address < 0x2000) {
-        ctx.ram_enabled = ((value & 0xF) == 0xA);
-    }
-
-    if ((address & 0xE000) == 0x2000) {
-        //rom bank number
-        if (value == 0) {
-            value = 1;
+    if (cart_mbc1()) {
+        if (address < 0x2000) {
+            ctx.ram_enabled = ((value & 0xF) == 0xA);
         }
 
-        value &= 0b11111;
+        if ((address & 0xE000) == 0x2000) {
+            //rom bank number
+            if (value == 0) {
+                value = 1;
+            }
 
-        ctx.rom_bank_value = value;
-        ctx.rom_bank_x = ctx.rom_data + (0x4000 * ctx.rom_bank_value);
-    }
+            value &= 0b11111;
 
-    if ((address & 0xE000) == 0x4000) {
-        //ram bank number
-        ctx.ram_bank_value = value & 0b11;
+            ctx.rom_bank_value = value;
+            ctx.rom_bank_x = ctx.rom_data + (0x4000 * ctx.rom_bank_value);
+        }
+
+        if ((address & 0xE000) == 0x4000)
+            ctx.ram_bank_value = value & 0b11;
 
         if (ctx.ram_banking) {
             if (cart_need_save()) {
@@ -314,36 +326,74 @@ void cart_write(u16 address, u8 value) {
 
             ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
         }
-    }
 
-    if ((address & 0xE000) == 0x6000) {
-        //banking mode select
-        ctx.banking_mode = value & 1;
 
-        ctx.ram_banking = ctx.banking_mode;
+        if ((address & 0xE000) == 0x6000) {
+            //banking mode select
+            ctx.banking_mode = value & 1;
 
-        if (ctx.ram_banking) {
-            if (cart_need_save()) {
-                cart_battery_save();
+            ctx.ram_banking = ctx.banking_mode;
+
+            if (ctx.ram_banking) {
+                if (cart_need_save()) {
+                    cart_battery_save();
+                }
+                ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
+            }
+        }
+
+        if ((address & 0xE000) == 0xA000) {
+            if (!ctx.ram_enabled) {
+                return;
             }
 
-            ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
+            if (!ctx.ram_bank) {
+                return;
+            }
+
+            ctx.ram_bank[address - 0xA000] = value;
+
+            if (ctx.battery) {
+                ctx.need_save = true;
+            }
         }
     }
-
-    if ((address & 0xE000) == 0xA000) {
-        if (!ctx.ram_enabled) {
-            return;
+    if (cart_mbc3()) {
+        if (address < 0x2000) {
+            ctx.ram_enabled = ((value & 0xF) == 0xA);
         }
-
-        if (!ctx.ram_bank) {
-            return;
+        else if (address < 0x4000) {
+            value &= 0x7F;
+            if (value == 0) {
+                value = 1;
+            }
+            ctx.rom_bank_value = value;
+            ctx.rom_bank_x = ctx.rom_data + (0x4000 * ctx.rom_bank_value);
         }
-
-        ctx.ram_bank[address - 0xA000] = value;
-
-        if (ctx.battery) {
-            ctx.need_save = true;
+        else if (address < 0x6000) {
+            if (value <= 0x03) {
+                ctx.ram_bank_value = value;
+                ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
+            }
+            else if (value >= 0x08 && value <= 0x0C) {
+                
+            }
+        }
+        else if (address < 0x8000) {
+            
+        }
+        else if (address >= 0xA000 && address < 0xC000) {
+            if (address >= 0xA000 || address <= 0xBFFF) {
+				Sleep(4);
+            }
+            if (ctx.ram_enabled) {
+                if (ctx.ram_bank) {
+                    ctx.ram_bank[address - 0xA000] = value;
+                    if (ctx.battery) {
+                        ctx.need_save = true;
+                    }
+                }
+            }
         }
     }
 }
