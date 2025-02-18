@@ -325,12 +325,9 @@ void cart_write(u16 address, u8 value) {
         if (ctx.ram_banking) {
             if (cart_need_save()) {
                 cart_battery_save();
+                ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
             }
-
-            ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
         }
-
-
         if ((address & 0xE000) == 0x6000) {
             //banking mode select
             ctx.banking_mode = value & 1;
@@ -344,7 +341,6 @@ void cart_write(u16 address, u8 value) {
                 ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
             }
         }
-
         if ((address & 0xE000) == 0xA000) {
             if (!ctx.ram_enabled) {
                 return;
@@ -353,9 +349,7 @@ void cart_write(u16 address, u8 value) {
             if (!ctx.ram_bank) {
                 return;
             }
-
             ctx.ram_bank[address - 0xA000] = value;
-
             if (ctx.battery) {
                 ctx.need_save = true;
             }
@@ -379,11 +373,8 @@ void cart_write(u16 address, u8 value) {
                 ctx.ram_bank = ctx.ram_banks[ctx.ram_bank_value];
             }
             else if (value >= 0x08 && value <= 0x0C) {
-                
+
             }
-        }
-        else if (address < 0x8000) {
-            
         }
         else if (address >= 0xA000 && address < 0xC000) {
             if (ctx.ram_enabled) {
@@ -394,6 +385,9 @@ void cart_write(u16 address, u8 value) {
                     }
                 }
             }
+        }
+        else if (address < 0x8000) {
+
         }
     }
 }
