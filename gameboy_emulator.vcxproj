@@ -23,7 +23,9 @@
     <ClInclude Include="cart.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="cpu.h" />
+    <ClInclude Include="dbg.h" />
     <ClInclude Include="dma.h" />
+    <ClInclude Include="emu.h" />
     <ClInclude Include="gamepad.h" />
     <ClInclude Include="interrupts.h" />
     <ClInclude Include="io.h" />

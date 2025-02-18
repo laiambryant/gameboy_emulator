@@ -167,7 +167,8 @@ void cart_setup_banking() {
             (ctx.header->ram_size == 4 && i < 16) ||
             (ctx.header->ram_size == 5 && i < 8)) {
             ctx.ram_banks[i] = malloc(0x2000);
-            memset(ctx.ram_banks[i], 0, 0x2000);
+            if (ctx.ram_banks[i] != NULL) 
+                memset(ctx.ram_banks[i], 0, 0x2000);
         }
     }
 
@@ -178,7 +179,7 @@ void cart_setup_banking() {
 bool cart_load(char* cart) {
     snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
 
-    FILE* fp = fopen("tests/roms/pokemonRed.gb", "r");
+    FILE* fp = fopen("tests/roms/zelda.gb", "r");
 
     if (!fp) {
         printf("Failed to open: %s\n", cart);

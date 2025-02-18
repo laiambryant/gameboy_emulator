@@ -8,19 +8,6 @@
 #include "dma.h"
 #include "ppu.h"
 
-
-
-/*
-  Emu components:
-
-  |Cart|
-  |CPU|
-  |Address Bus|
-  |PPU|
-  |Timer|
-
-*/
-
 static emu_context ctx;
 
 emu_context* emu_get_context() {

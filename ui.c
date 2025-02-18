@@ -16,7 +16,7 @@ SDL_Renderer *sdlDebugRenderer;
 SDL_Texture *sdlDebugTexture;
 SDL_Surface *debugScreen;
 
-static int scale = 4;
+static int scale = 3;
 
 void ui_init() {
     
@@ -25,21 +25,21 @@ void ui_init() {
 
     SDL_CreateWindowAndRenderer("Window", SCREEN_WIDTH, SCREEN_HEIGHT, 0, &sdlWindow, &sdlRenderer);
 
-    screen = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_ARGB8888);
+    screen = SDL_CreateSurface(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_PIXELFORMAT_RGBA8888);
     sdlTexture = SDL_CreateTexture(sdlRenderer,
-                                                SDL_PIXELFORMAT_ARGB8888,
-                                                SDL_TEXTUREACCESS_STREAMING,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
                                                 SCREEN_WIDTH, SCREEN_HEIGHT);
 
     SDL_CreateWindowAndRenderer("Debug Window", 16 * 8 * scale, 32 * 8 * scale, 0, 
         &sdlDebugWindow, &sdlDebugRenderer);
 
     debugScreen = SDL_CreateSurface( (16 * 8 * scale) + (16 * scale),
-                                            (32 * 8 * scale) + (64 * scale),SDL_PIXELFORMAT_ARGB8888);
+                                            (32 * 8 * scale) + (64 * scale), SDL_PIXELFORMAT_RGBA8888);
 
     sdlDebugTexture = SDL_CreateTexture(sdlDebugRenderer,
-                                            SDL_PIXELFORMAT_ARGB8888,
-                                            SDL_TEXTUREACCESS_STREAMING,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
                                             (16 * 8 * scale) + (16 * scale), 
                                             (32 * 8 * scale) + (64 * scale));
 
@@ -95,7 +95,6 @@ void update_dbg_window() {
 
     u16 addr = 0x8000;
 
-    //384 tiles, 24 x 16
     for (int y=0; y<24; y++) {
         for (int x=0; x<16; x++) {
             display_tile(debugScreen, addr, tileNum, xDraw + (x * scale), yDraw + (y * scale));
