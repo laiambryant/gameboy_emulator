@@ -283,11 +283,17 @@ u8 cart_read(u16 address) {
     }
     if (cart_mbc3()) {
         if (address >= 0xA000 && address < 0xC000) {
-			if (!ctx.ram_enabled) {
-				return 0xFF;
-			}
+            if (!ctx.ram_enabled) {
+                return 0xFF;
+            }
             if (!ctx.ram_bank) {
                 return 0xFF;
+            }
+            if (ctx.ram_bank_value <= 0x03) {
+                return ctx.ram_banks[ctx.ram_bank_value][address - 0xA000];
+            }
+            else if (ctx.ram_bank_value >= 0x08 && ctx.ram_bank_value <= 0x0C) {
+                return 0xFF; 
             }
         }
     }
@@ -305,13 +311,10 @@ void cart_write(u16 address, u8 value) {
         }
 
         if ((address & 0xE000) == 0x2000) {
-            //rom bank number
             if (value == 0) {
                 value = 1;
             }
-
             value &= 0b11111;
-
             ctx.rom_bank_value = value;
             ctx.rom_bank_x = ctx.rom_data + (0x4000 * ctx.rom_bank_value);
         }
@@ -383,9 +386,6 @@ void cart_write(u16 address, u8 value) {
             
         }
         else if (address >= 0xA000 && address < 0xC000) {
-            if (address >= 0xA000 || address <= 0xBFFF) {
-				Sleep(4);
-            }
             if (ctx.ram_enabled) {
                 if (ctx.ram_bank) {
                     ctx.ram_bank[address - 0xA000] = value;
