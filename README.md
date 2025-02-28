@@ -43,3 +43,5 @@ There are still more things that could be implemented:
 - etc.
 
 Feel free to iterate over this software should you want to
+
+Should you want to run it on windows you can find the vscode project on the "windows" branch
