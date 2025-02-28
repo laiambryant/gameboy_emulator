@@ -362,3 +362,10 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /tests/roms
+vs/SDL3.dll
+vs/gameboy_emulator.sln
+vs/gameboy_emulator.vcxproj
+vs/gameboy_emulator.vcxproj.filters
+.vscode
+tests/pokemonRed.gb
+

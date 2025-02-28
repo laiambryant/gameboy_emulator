@@ -1,5 +1,12 @@
 #include <stdio.h>
+#ifdef _WIN32
+#define THREADS
 #include <Windows.h>
+#elif __linux__
+#define THREADS
+#include <pthread.h>
+#endif 
+
 #include "emu.h"
 #include "cart.h"
 #include "cpu.h"
@@ -39,11 +46,7 @@ void* cpu_run(void* p) {
 }
 
 int emu_run(int argc, char** argv) {
-    if (argc < 2) {
-        return -1;
     
-    }
-
     if (!cart_load(argv[1])) {
         printf("Failed to load ROM file: %s\n", argv[1]);
         return -2;
@@ -53,7 +56,12 @@ int emu_run(int argc, char** argv) {
 
     ui_init();
 
+    #ifdef _WIN32
 	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)cpu_run, NULL, 0, NULL);
+    #elif __linux__
+    pthread_t cpu_thread;
+    pthread_create(&cpu_thread, NULL, cpu_run, NULL);
+    #endif
 
     u32 prev_frame = 0;
 

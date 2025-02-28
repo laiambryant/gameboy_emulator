@@ -139,7 +139,7 @@ static const char* LIC_CODE[0xA5] = {
     [0x92] = "Video system",
     [0x93] = "Ocean/Acclaim",
     [0x95] = "Varie",
-    [0x96] = "Yonezawa/s’pal",
+    [0x96] = "Yonezawa/sï¿½pal",
     [0x97] = "Kaneko",
     [0x99] = "Pack in soft",
     [0xA4] = "Konami (Yu-Gi-Oh!)"
@@ -182,7 +182,7 @@ void cart_setup_banking() {
 bool cart_load(char* cart) {
     snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
 
-    FILE* fp = fopen("tests/roms/pokemonRed.gb", "r");
+    FILE* fp = fopen("tests/pokemonRed.gb", "r");
 
     if (!fp) {
         printf("Failed to open: %s\n", cart);
@@ -235,7 +235,12 @@ void cart_battery_load() {
     }
 
     char fn[1048];
+    #ifdef _WIN32
     sprintf_s(fn, sizeof(fn), "%s.battery", ctx.filename);
+    #else
+    snprintf(fn, sizeof(fn), "%s.battery", ctx.filename);
+    #endif
+
     FILE* fp = fopen(fn, "rb");
 
     if (!fp) {
@@ -253,7 +258,11 @@ void cart_battery_save() {
     }
 
     char fn[1048];
+    #ifdef _WIN32
     sprintf_s(fn, sizeof(fn), "%s.battery", ctx.filename);
+    #else
+    snprintf(fn, sizeof(fn), "%s.battery", ctx.filename);
+    #endif
     FILE* fp = fopen(fn, "wb");
 
     if (!fp) {

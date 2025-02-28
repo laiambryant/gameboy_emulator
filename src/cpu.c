@@ -49,12 +49,21 @@ bool cpu_step() {
 
 #if CPU_DEBUG == 1
         char flags[16];
+        #ifdef _WIN32
         sprintf_s(flags, sizeof(flags), "%c%c%c%c",
             ctx.regs.f & (1 << 7) ? 'Z' : '-',
             ctx.regs.f & (1 << 6) ? 'N' : '-',
             ctx.regs.f & (1 << 5) ? 'H' : '-',
             ctx.regs.f & (1 << 4) ? 'C' : '-'
         );
+        #else
+        snprintf(flags, sizeof(flags), "%c%c%c%c",
+            ctx.regs.f & (1 << 7) ? 'Z' : '-',
+            ctx.regs.f & (1 << 6) ? 'N' : '-',
+            ctx.regs.f & (1 << 5) ? 'H' : '-',
+            ctx.regs.f & (1 << 4) ? 'C' : '-'
+        );
+        #endif
 
         char inst[256] = { 0 };
         inst_to_str(&ctx, inst);
