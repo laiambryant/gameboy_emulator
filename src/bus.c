@@ -2,6 +2,7 @@
 #include "cart.h"
 #include "ram.h"
 #include "io.h"
+#include "cpu.h"
 #include "ppu.h"
 #include "dma.h"
 

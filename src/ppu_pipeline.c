@@ -1,6 +1,8 @@
 #include "ppu.h"
+#include "ppu.h"
 #include "lcd.h"
 #include "bus.h"
+#include "emu_api.h"
 
 bool window_visible() {
     return LCDC_WIN_ENABLE && lcd_get_context()->win_x >= 0 &&
@@ -240,7 +242,8 @@ void pipeline_push_pixel() {
         u32 pixel_data = pixel_fifo_pop();
 
         if (ppu_get_context()->pfc.line_x >= (lcd_get_context()->scroll_x % 8)) {
-            ppu_get_context()->video_buffer[ppu_get_context()->pfc.pushed_x +
+            uint32_t* back_buffer = emu_api_get_back_buffer();
+            back_buffer[ppu_get_context()->pfc.pushed_x +
                 (lcd_get_context()->ly * XRES)] = pixel_data;
 
             ppu_get_context()->pfc.pushed_x++;

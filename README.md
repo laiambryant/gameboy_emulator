@@ -1,26 +1,43 @@
 # gameboy_emulator
 
-A game Boy emulator written in C and running on SDL3.
+A Game Boy emulator powered by a C core with a Go (Ebiten) frontend.
 
 ## Useful information
 
-The emulator supports controllers and includes also a debug window that shows all the sprites currently loaded in memory.
+The emulator supports keyboard input and currently focuses on the main window. The debug window will return in a future phase.
 
 ![alt text](<resources/images/pkmn red gif.gif>)
 
-To run it on your own device you must have SDL3 installed. My makefile expects you to have an SDL/build folder containing SDL3. At the time i am writing this the current version is the 3.2.4. You can download SDL [here](https://www.libsdl.org/).
+## Build prerequisites
 
-To build just run 
-``` bash
-make
+### Windows
+- Go 1.21+
+- MinGW-w64 or MSYS2 (gcc) for cgo
+  - MSYS2 recommended: https://www.msys2.org/
+  - Install gcc: `pacman -S mingw-w64-x86_64-gcc`
+- Environment variables:
+  ```bash
+  set CGO_ENABLED=1
+  set CC=gcc
+  ```
+
+### Linux
+- Go 1.21+
+- GCC (`sudo apt install build-essential`)
+
+## Build
+
+```bash
+go build -o gameboy.exe .
 ```
- while in the root directory and to run just run 
 
-``` bash
-make run
+## Run
+
+```bash
+gameboy.exe path/to/rom.gb
 ```
 
-You can pass Supports MBC1, MBC2 And MBC3 cartridges. Tested on The Legend of Zelda Link's Awakening and Pokemon Red
+Supports MBC1 and MBC3 cartridges. Tested on The Legend of Zelda Link's Awakening and Pokemon Red.
 
 ## References
 

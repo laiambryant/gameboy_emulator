@@ -2,10 +2,10 @@
 
 #include "common.h"
 
-static const int LINES_PER_FRAME = 154;
-static const int TICKS_PER_LINE = 456;
-static const int YRES = 144;
-static const int XRES = 160;
+#define LINES_PER_FRAME 154
+#define TICKS_PER_LINE 456
+#define YRES 144
+#define XRES 160
 
 typedef enum {
     FS_TILE,
@@ -75,7 +75,6 @@ typedef struct {
 
     u32 current_frame;
     u32 line_ticks;
-    u32 *video_buffer;
 } ppu_context;
 
 void ppu_init();

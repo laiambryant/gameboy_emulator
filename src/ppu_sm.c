@@ -1,9 +1,11 @@
 #include "ppu.h"
+#include "ppu.h"
 #include "lcd.h"
 #include "cpu.h"
 #include "interrupts.h"
 #include "string.h"
 #include "cart.h"
+#include "emu_api.h"
 
 void pipeline_fifo_reset();
 void pipeline_process();
@@ -156,16 +158,17 @@ void ppu_mode_hblank() {
             }
 
             ppu_get_context()->current_frame++;
+            emu_api_frame_complete();
 
             //calc FPS...
-            u32 end = get_ticks();
-            u32 frame_time = end - prev_frame_time;
+            u32 end = go_get_ticks_ms();
+            u32 frame_time = end - (u32)prev_frame_time;
 
             if (frame_time < target_frame_time) {
-                delay((target_frame_time - frame_time));
+                go_delay_ms((target_frame_time - frame_time));
             }
 
-            if (end - start_timer >= 1000) {
+            if (end - (u32)start_timer >= 1000) {
                 u32 fps = frame_count;
                 start_timer = end;
                 frame_count = 0;
@@ -178,7 +181,7 @@ void ppu_mode_hblank() {
             }
 
             frame_count++;
-            prev_frame_time = get_ticks();
+            prev_frame_time = go_get_ticks_ms();
 
         } else {
             LCDS_MODE_SET(MODE_OAM);
