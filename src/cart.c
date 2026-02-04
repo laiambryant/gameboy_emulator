@@ -184,7 +184,6 @@ bool cart_load(char* cart) {    snprintf(ctx.filename, sizeof(ctx.filename), "%s
     printf("\t ROM Size : %d KB\n", 32 << ctx.header->rom_size);
     printf("\t RAM Size : %2.2X\n", ctx.header->ram_size);
     printf("\t LIC Code : %2.2X (%s)\n", ctx.header->lic_code, cart_lic_name());
-    printf("\t ROM Vers : %2.2X\n", ctx.header->version);
     u16 x = 0;
     for (u16 i = 0x0134; i <= 0x014C; i++) {
         x = x - ctx.rom_data[i] - 1;
