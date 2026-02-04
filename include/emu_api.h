@@ -1,9 +1,8 @@
 #ifndef EMU_API_H
 #define EMU_API_H
 
-#include <stdint.h>
 #include <stdbool.h>
-
+#include <stdint.h>
 
 /**
  * Initialize the emulator core.
@@ -27,7 +26,7 @@ void emu_api_shutdown(void);
  *        -1 on file I/O error
  *        -2 on unsupported cartridge type
  */
-int emu_api_load_rom(const char* path);
+int emu_api_load_rom(const char *path);
 
 /**
  * Start the emulator CPU thread.
@@ -56,14 +55,14 @@ void emu_api_set_paused(bool paused);
  *
  * @return Pointer to uint32_t array of size [width * height]
  */
-uint32_t* emu_api_get_front_buffer(void);
+uint32_t *emu_api_get_front_buffer(void);
 
 /**
  * Get pointer to the back buffer (used by PPU rendering).
  *
  * @return Pointer to uint32_t array of size [width * height]
  */
-uint32_t* emu_api_get_back_buffer(void);
+uint32_t *emu_api_get_back_buffer(void);
 
 /**
  * Get framebuffer width in pixels.
