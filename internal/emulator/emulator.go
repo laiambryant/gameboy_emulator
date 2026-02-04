@@ -45,7 +45,8 @@ type InputState struct {
 	Up, Down, Left, Right bool
 }
 
-func New(romPath string) (*Emulator, error) {	if ret := C.emu_api_init(); ret != 0 {
+func New(romPath string) (*Emulator, error) {
+	if ret := C.emu_api_init(); ret != 0 {
 		return nil, errors.New("failed to initialize emulator core")
 	}
 	cPath := C.CString(romPath)
@@ -65,7 +66,8 @@ func New(romPath string) (*Emulator, error) {	if ret := C.emu_api_init(); ret !=
 	return &Emulator{running: false}, nil
 }
 
-func (e *Emulator) Start() error {	if e.running {
+func (e *Emulator) Start() error {
+	if e.running {
 		return errors.New("emulator already running")
 	}
 	if ret := C.emu_api_start(); ret != 0 {
@@ -75,16 +77,19 @@ func (e *Emulator) Start() error {	if e.running {
 	return nil
 }
 
-func (e *Emulator) Stop() {	if e.running {
+func (e *Emulator) Stop() {
+	if e.running {
 		C.emu_api_stop()
 		e.running = false
 	}
 }
 
-func (e *Emulator) SwapBuffers() bool {	return bool(C.emu_api_swap_buffers())
+func (e *Emulator) SwapBuffers() bool {
+	return bool(C.emu_api_swap_buffers())
 }
 
-func (e *Emulator) Framebuffer() []byte {	ptr := C.emu_api_get_front_buffer()
+func (e *Emulator) Framebuffer() []byte {
+	ptr := C.emu_api_get_front_buffer()
 	w := int(C.emu_api_get_width())
 	h := int(C.emu_api_get_height())
 	size := w * h * 4
@@ -93,7 +98,8 @@ func (e *Emulator) Framebuffer() []byte {	ptr := C.emu_api_get_front_buffer()
 	return fb
 }
 
-func (e *Emulator) SetInput(state InputState) {	var mask C.uint8_t
+func (e *Emulator) SetInput(state InputState) {
+	var mask C.uint8_t
 	if state.A {
 		mask |= 0x01
 	}
@@ -121,9 +127,11 @@ func (e *Emulator) SetInput(state InputState) {	var mask C.uint8_t
 	C.emu_api_set_input(mask)
 }
 
-func (e *Emulator) SetPaused(paused bool) {	C.emu_api_set_paused(C.bool(paused))
+func (e *Emulator) SetPaused(paused bool) {
+	C.emu_api_set_paused(C.bool(paused))
 }
 
-func (e *Emulator) Close() {	e.Stop()
+func (e *Emulator) Close() {
+	e.Stop()
 	C.emu_api_shutdown()
 }
