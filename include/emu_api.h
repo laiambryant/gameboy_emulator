@@ -4,9 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// ============================================================================
-// Initialization & Shutdown
-// ============================================================================
 
 /**
  * Initialize the emulator core.
@@ -22,10 +19,6 @@ int emu_api_init(void);
  */
 void emu_api_shutdown(void);
 
-// ============================================================================
-// ROM Loading
-// ============================================================================
-
 /**
  * Load a Game Boy ROM from file.
  *
@@ -35,10 +28,6 @@ void emu_api_shutdown(void);
  *        -2 on unsupported cartridge type
  */
 int emu_api_load_rom(const char* path);
-
-// ============================================================================
-// CPU Thread Control
-// ============================================================================
 
 /**
  * Start the emulator CPU thread.
@@ -60,10 +49,6 @@ void emu_api_stop(void);
  * @param paused true to pause, false to resume
  */
 void emu_api_set_paused(bool paused);
-
-// ============================================================================
-// Framebuffer Access (Double-Buffered)
-// ============================================================================
 
 /**
  * Get pointer to the front buffer (safe for reading).
@@ -109,10 +94,6 @@ bool emu_api_swap_buffers(void);
  */
 void emu_api_frame_complete(void);
 
-// ============================================================================
-// Input
-// ============================================================================
-
 /**
  * Set the current input state.
  *
@@ -127,10 +108,6 @@ void emu_api_frame_complete(void);
  *   bit 7 (0x80): Down
  */
 void emu_api_set_input(uint8_t input_state);
-
-// ============================================================================
-// Timing Callbacks (Implemented in Go, called by C)
-// ============================================================================
 
 /**
  * Delay execution for specified milliseconds.

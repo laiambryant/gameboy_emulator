@@ -20,20 +20,16 @@ typedef struct {
 
 static cart_context ctx;
 
-bool cart_need_save() {
-    return ctx.need_save;
+bool cart_need_save() {    return ctx.need_save;
 }
 
-bool cart_mbc1() {
-    return BETWEEN(ctx.header->type, 0x01, 0x03);
+bool cart_mbc1() {    return BETWEEN(ctx.header->type, 0x01, 0x03);
 }
 
-bool cart_mbc3() {
-    return BETWEEN(ctx.header->type, 0x11, 0x13);
+bool cart_mbc3() {    return BETWEEN(ctx.header->type, 0x11, 0x13);
 }
 
-bool cart_battery() {
-    return ctx.header->type == 3;
+bool cart_battery() {    return ctx.header->type == 3;
 }
 
 static const char* ROM_TYPES[] = {
@@ -138,22 +134,19 @@ static const char* LIC_CODE[0xA5] = {
     [0xA4] = "Konami (Yu-Gi-Oh!)"
 };
 
-const char* cart_lic_name() {
-    if (ctx.header->new_lic_code <= 0xA4) {
+const char* cart_lic_name() {    if (ctx.header->new_lic_code <= 0xA4) {
         return LIC_CODE[ctx.header->lic_code];
     }
     return "UNKNOWN";
 }
 
-const char* cart_type_name() {
-    if (ctx.header->type <= 0x22) {
+const char* cart_type_name() {    if (ctx.header->type <= 0x22) {
         return ROM_TYPES[ctx.header->type];
     }
     return "UNKNOWN";
 }
 
-void cart_setup_banking() {
-    for (int i = 0; i < 16; i++) {
+void cart_setup_banking() {    for (int i = 0; i < 16; i++) {
         ctx.ram_banks[i] = 0;
         if ((ctx.header->ram_size == 2 && i == 0) ||
             (ctx.header->ram_size == 3 && i < 4) ||
@@ -165,11 +158,10 @@ void cart_setup_banking() {
         }
     }
     ctx.ram_bank = ctx.ram_banks[0];
-    ctx.rom_bank_x = ctx.rom_data + 0x4000; //rom bank 1
+    ctx.rom_bank_x = ctx.rom_data + 0x4000; 
 }
 
-bool cart_load(char* cart) {
-    snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
+bool cart_load(char* cart) {    snprintf(ctx.filename, sizeof(ctx.filename), "%s", cart);
     FILE* fp = fopen(cart, "rb");
     if (!fp) {
         printf("Failed to open: %s\n", cart);
@@ -207,8 +199,7 @@ bool cart_load(char* cart) {
     return true;
 }
 
-void cart_battery_load() {
-    if (!ctx.ram_bank) {
+void cart_battery_load() {    if (!ctx.ram_bank) {
         return;
     }
     char fn[1048];
@@ -226,8 +217,7 @@ void cart_battery_load() {
     fclose(fp);
 }
 
-void cart_battery_save() {
-    if (!ctx.ram_bank) {
+void cart_battery_save() {    if (!ctx.ram_bank) {
         return;
     }
     char fn[1048];
@@ -245,8 +235,7 @@ void cart_battery_save() {
     fclose(fp);
 }
 
-u8 cart_read(u16 address) {
-    if ((!cart_mbc1() && !cart_mbc3()) || address < 0x4000) {
+u8 cart_read(u16 address) {    if ((!cart_mbc1() && !cart_mbc3()) || address < 0x4000) {
         return ctx.rom_data[address];
     }
     if (cart_mbc1()) {
@@ -279,8 +268,7 @@ u8 cart_read(u16 address) {
     return ctx.rom_bank_x[address - 0x4000];
 }
 
-void cart_write(u16 address, u8 value) {
-    if (!cart_mbc1() && !cart_mbc3()) {
+void cart_write(u16 address, u8 value) {    if (!cart_mbc1() && !cart_mbc3()) {
         return;
     }
     if (cart_mbc1()) {
@@ -361,6 +349,5 @@ void cart_write(u16 address, u8 value) {
     }
 }
 
-bool cart_supported() {
-    return cart_mbc1() || cart_mbc3() || ctx.header->type == 0x00;
+bool cart_supported() {    return cart_mbc1() || cart_mbc3() || ctx.header->type == 0x00;
 }

@@ -282,8 +282,7 @@ instruction instructions[0x100] = {
 
 
 
-instruction* instruction_by_opcode(u8 opcode) {
-    return &instructions[opcode];
+instruction* instruction_by_opcode(u8 opcode) {    return &instructions[opcode];
 }
 
 char* inst_lookup[] = {
@@ -337,8 +336,7 @@ char* inst_lookup[] = {
     "IN_SET"
 };
 
-char* inst_name(in_type t) {
-    return inst_lookup[t];
+char* inst_name(in_type t) {    return inst_lookup[t];
 }
 
 static char* rt_lookup[] = {
@@ -359,18 +357,15 @@ static char* rt_lookup[] = {
     "PC"
 };
 
-void inst_to_str(cpu_context* ctx, char* str) {
-    instruction* inst = ctx->cur_inst;
+void inst_to_str(cpu_context* ctx, char* str) {    instruction* inst = ctx->cur_inst;
     #ifdef _WIN32
     sprintf_s(str, 256, "%s ", inst_name(inst->type));
     #else
     snprintf(str, 256, "%s ", inst_name(inst->type));
     #endif
-
     switch (inst->mode) {
     case AM_IMP:
         return;
-
     case AM_R_D16:
     case AM_R_A16:
         #ifdef _WIN32
@@ -381,7 +376,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], ctx->fetched_data);
         #endif
         return;
-
     case AM_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s %s", inst_name(inst->type),
@@ -391,7 +385,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1]);
         #endif
         return;
-
     case AM_R_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s %s,%s", inst_name(inst->type),
@@ -401,7 +394,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
         #endif
         return;
-
     case AM_MR_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s (%s),%s", inst_name(inst->type),
@@ -411,7 +403,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
         #endif
         return;
-
     case AM_MR:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s (%s)", inst_name(inst->type),
@@ -421,7 +412,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1]);
         #endif
         return;
-
     case AM_R_MR:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s %s,(%s)", inst_name(inst->type),
@@ -431,7 +421,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
         #endif
         return;
-
     case AM_R_D8:
     case AM_R_A8:
         #ifdef _WIN32
@@ -442,7 +431,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], ctx->fetched_data & 0xFF);
         #endif
         return;
-
     case AM_R_HLI:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s %s,(%s+)", inst_name(inst->type),
@@ -452,7 +440,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
         #endif
         return;
-
     case AM_R_HLD:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s %s,(%s-)", inst_name(inst->type),
@@ -460,10 +447,8 @@ void inst_to_str(cpu_context* ctx, char* str) {
         #else
         snprintf(str, 256, "%s %s,(%s-)", inst_name(inst->type),
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
-
         #endif
         return;
-
     case AM_HLI_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s (%s+),%s", inst_name(inst->type),
@@ -473,7 +458,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
         #endif
         return;
-
     case AM_HLD_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s (%s-),%s", inst_name(inst->type),
@@ -483,7 +467,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             rt_lookup[inst->reg_1], rt_lookup[inst->reg_2]);
         #endif
         return;
-
     case AM_A8_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s $%02X,%s", inst_name(inst->type),
@@ -492,9 +475,7 @@ void inst_to_str(cpu_context* ctx, char* str) {
         snprintf(str, 256, "%s $%02X,%s", inst_name(inst->type),
             bus_read(ctx->regs.pc - 1), rt_lookup[inst->reg_2]);
         #endif
-
         return;
-
     case AM_HL_SPR:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s (%s),SP+%d", inst_name(inst->type),
@@ -502,10 +483,8 @@ void inst_to_str(cpu_context* ctx, char* str) {
         #else
         snprintf(str, 256, "%s (%s),SP+%d", inst_name(inst->type),
             rt_lookup[inst->reg_1], ctx->fetched_data & 0xFF);
-        
         #endif
         return;
-
     case AM_D8:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s $%02X", inst_name(inst->type),
@@ -513,10 +492,8 @@ void inst_to_str(cpu_context* ctx, char* str) {
         #else
         snprintf(str, 256, "%s $%02X", inst_name(inst->type),
             ctx->fetched_data & 0xFF);
-        
         #endif
         return;
-
     case AM_D16:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s $%04X", inst_name(inst->type),
@@ -524,10 +501,8 @@ void inst_to_str(cpu_context* ctx, char* str) {
         #else
         snprintf(str, 256, "%s $%04X", inst_name(inst->type),
             ctx->fetched_data);
-        
         #endif
         return;
-
     case AM_MR_D8:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s (%s),$%02X", inst_name(inst->type),
@@ -535,10 +510,8 @@ void inst_to_str(cpu_context* ctx, char* str) {
         #else
         snprintf(str, 256, "%s (%s),$%02X", inst_name(inst->type),
             rt_lookup[inst->reg_1], ctx->fetched_data & 0xFF);
-       
         #endif
         return;
-
     case AM_A16_R:
         #ifdef _WIN32
         sprintf_s(str, 256, "%s ($%04X),%s", inst_name(inst->type),
@@ -548,7 +521,6 @@ void inst_to_str(cpu_context* ctx, char* str) {
             ctx->fetched_data, rt_lookup[inst->reg_2]);
         #endif
         return;
-
     default:
         fprintf(stderr, "INVALID AM: %d\n", inst->mode);
         NO_IMPL

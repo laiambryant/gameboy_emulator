@@ -1,7 +1,6 @@
 package emulator
 
-func (s InputState) Bitmask() uint8 {
-	var mask uint8
+func (s InputState) Bitmask() uint8 {	var mask uint8
 	if s.A {
 		mask |= 0x01
 	}

@@ -8,12 +8,10 @@ void pipeline_process();
 
 static ppu_context ctx;
 
-ppu_context *ppu_get_context() {
-    return &ctx;
+ppu_context *ppu_get_context() {    return &ctx;
 }
 
-void ppu_init() {
-    ctx.current_frame = 0;
+void ppu_init() {    ctx.current_frame = 0;
     ctx.line_ticks = 0;
     ctx.pfc.line_x = 0;
     ctx.pfc.pushed_x = 0;
@@ -21,20 +19,15 @@ void ppu_init() {
     ctx.pfc.pixel_fifo.size = 0;
     ctx.pfc.pixel_fifo.head = ctx.pfc.pixel_fifo.tail = NULL;
     ctx.pfc.cur_fetch_state = FS_TILE;
-
     ctx.line_sprites = 0;
     ctx.fetched_entry_count = 0;
     ctx.window_line = 0;
-
     lcd_init();
     LCDS_MODE_SET(MODE_OAM);
-
     memset(ctx.oam_ram, 0, sizeof(ctx.oam_ram));
 }
 
-void ppu_tick() {
-    ctx.line_ticks++;
-
+void ppu_tick() {    ctx.line_ticks++;
     switch(LCDS_MODE) {
     case MODE_OAM:
         ppu_mode_oam();
@@ -52,29 +45,23 @@ void ppu_tick() {
 }
 
 
-void ppu_oam_write(u16 address, u8 value) {
-    if (address >= 0xFE00) {
+void ppu_oam_write(u16 address, u8 value) {    if (address >= 0xFE00) {
         address -= 0xFE00;
     }
-
     u8 *p = (u8 *)ctx.oam_ram;
     p[address] = value;
 }
 
-u8 ppu_oam_read(u16 address) {
-    if (address >= 0xFE00) {
+u8 ppu_oam_read(u16 address) {    if (address >= 0xFE00) {
         address -= 0xFE00;
     }
-
     u8 *p = (u8 *)ctx.oam_ram;
     return p[address];
 }
 
-void ppu_vram_write(u16 address, u8 value) {
-    ctx.vram[address - 0x8000] = value;
+void ppu_vram_write(u16 address, u8 value) {    ctx.vram[address - 0x8000] = value;
 }
 
-u8 ppu_vram_read(u16 address) {
-    return ctx.vram[address - 0x8000];
+u8 ppu_vram_read(u16 address) {    return ctx.vram[address - 0x8000];
 }
 

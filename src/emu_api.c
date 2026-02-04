@@ -30,37 +30,30 @@ static pthread_t cpu_thread;
 static bool cpu_thread_created = false;
 #endif
 
-static void* cpu_run(void* p) {
-    (void)p;
+static void* cpu_run(void* p) {    (void)p;
     timer_init();
     cpu_init();
     ppu_init();
-
     emu_get_context()->running = true;
     emu_get_context()->paused = false;
     emu_get_context()->ticks = 0;
-
     while (emu_get_context()->running) {
         if (emu_get_context()->paused) {
             go_delay_ms(10);
             continue;
         }
-
         if (!cpu_step()) {
             printf("CPU Stopped\n");
             emu_get_context()->running = false;
             break;
         }
     }
-
     return 0;
 }
 
-int emu_api_init(void) {
-    if (initialized) {
+int emu_api_init(void) {    if (initialized) {
         return 0;
     }
-
     emu_get_context()->die = false;
     memset(video_buffer_0, 0, sizeof(video_buffer_0));
     memset(video_buffer_1, 0, sizeof(video_buffer_1));
@@ -68,38 +61,30 @@ int emu_api_init(void) {
     return 0;
 }
 
-void emu_api_shutdown(void) {
-    emu_api_stop();
+void emu_api_shutdown(void) {    emu_api_stop();
     initialized = false;
 }
 
-int emu_api_load_rom(const char* path) {
-    if (!path) {
+int emu_api_load_rom(const char* path) {    if (!path) {
         return -1;
     }
-
     if (!cart_load((char*)path)) {
         return -1;
     }
-
     if (!cart_supported()) {
         return -2;
     }
-
     return 0;
 }
 
-int emu_api_start(void) {
-    if (!initialized) {
+int emu_api_start(void) {    if (!initialized) {
         if (emu_api_init() != 0) {
             return -1;
         }
     }
-
     if (emu_get_context()->running) {
         return 0;
     }
-
 #ifdef _WIN32
     cpu_thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)cpu_run, NULL, 0, NULL);
     if (!cpu_thread) {
@@ -111,17 +96,13 @@ int emu_api_start(void) {
     }
     cpu_thread_created = true;
 #endif
-
     return 0;
 }
 
-void emu_api_stop(void) {
-    if (!emu_get_context()->running) {
+void emu_api_stop(void) {    if (!emu_get_context()->running) {
         return;
     }
-
     emu_get_context()->running = false;
-
 #ifdef _WIN32
     if (cpu_thread) {
         WaitForSingleObject(cpu_thread, INFINITE);
@@ -136,43 +117,35 @@ void emu_api_stop(void) {
 #endif
 }
 
-void emu_api_set_paused(bool paused) {
-    emu_get_context()->paused = paused;
+void emu_api_set_paused(bool paused) {    emu_get_context()->paused = paused;
 }
 
-uint32_t* emu_api_get_front_buffer(void) {
-    return front_buffer;
+uint32_t* emu_api_get_front_buffer(void) {    return front_buffer;
 }
 
-uint32_t* emu_api_get_back_buffer(void) {
-    return back_buffer;
+uint32_t* emu_api_get_back_buffer(void) {    return back_buffer;
 }
 
-int emu_api_get_width(void) {
-    return XRES;
+int emu_api_get_width(void) {    return XRES;
 }
 
-int emu_api_get_height(void) {
-    return YRES;
+int emu_api_get_height(void) {    return YRES;
 }
 
-bool emu_api_swap_buffers(void) {
-    if (frame_ready) {
+bool emu_api_swap_buffers(void) {    if (frame_ready) {
         frame_ready = false;
         return true;
     }
     return false;
 }
 
-void emu_api_frame_complete(void) {
-    uint32_t* tmp = back_buffer;
+void emu_api_frame_complete(void) {    uint32_t* tmp = back_buffer;
     back_buffer = front_buffer;
     front_buffer = tmp;
     frame_ready = true;
 }
 
-void emu_api_set_input(uint8_t input_state) {
-    gamepad_state* state = gamepad_get_state();
+void emu_api_set_input(uint8_t input_state) {    gamepad_state* state = gamepad_get_state();
     state->a = (input_state & 0x01) != 0;
     state->b = (input_state & 0x02) != 0;
     state->select = (input_state & 0x04) != 0;
